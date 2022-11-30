@@ -321,3 +321,16 @@ public class PlayerTwo extends ShotMan{
         this.enemy = player1;
     }
 }
+//プレイヤー２をNPCを継承して作る
+public class MousePlayer extends NPC{
+    public MousePlayer(float x,float y){
+        super(x,y);
+    }
+    public void move(){
+        this.aim(mouseX,mouseY);
+        int distance = 30;
+        if(dist(this.x,this.y,mouseX,mouseY) >= distance){
+            drive();
+        }
+    }
+}

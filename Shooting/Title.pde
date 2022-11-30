@@ -12,7 +12,7 @@ public class Title{
         this.windowWidth  = width  * 0.7;
         this.windowHeight = height * 0.7;
         this.selectingNumber = 1;
-        this.maxLv = 5;
+        this.maxLv = 6;
         
         this.textHeight = this.windowHeight * 0.05;
         this.interval = this.textHeight;
@@ -39,9 +39,10 @@ public class Title{
         translate(0,textHeight * 2);
         
         //選択肢の箇条書き
-        for (int i = 1;i <= maxLv;i++) {
+        for (int i = 1;i <= maxLv + 1;i++) {
             fill(0);
-            text("level" + i,0,0);
+            if(i <= maxLv)text("level" + i,0,0);
+            else text("player vs player",0,0);
             if (selectingNumber == i) {
                 stroke(255,100,100);
                 line(0, - textHeight * 0.6,windowWidth - 2*textHeight, - textHeight * 0.6);
@@ -81,6 +82,17 @@ public class Title{
                     player1.resetPoint();
                     player1.putUnder();
                     break;
+                case 6:
+                    gamemode = Gamemode.ACTIVE;
+                    changePlayer2(new LevelSix(width/2,height/4));
+                    player1.resetPoint();
+                    player1.putUnder();
+                    break;
+                default:
+                    gamemode = Gamemode.ACTIVE;
+                    changePlayer2(new MousePlayer(width/2,height/4));
+                    player1.resetPoint();
+
             }
         player2.resetPoint();
     }
@@ -97,13 +109,13 @@ public class Title{
         if(!key_z_flag)zflag = 0;
 
         if(keyPressed && keyCode == UP && upflag == 1){
-            selectingNumber = (selectingNumber - 1 + maxLv) % maxLv;
-            if(selectingNumber == 0)selectingNumber = maxLv;
+            selectingNumber = (selectingNumber - 1 + maxLv + 1) % (maxLv + 1);
+            if(selectingNumber == 0)selectingNumber = maxLv + 1;
             upflag++;
         }
         if(keyPressed && keyCode == DOWN && downflag == 1){
-            selectingNumber = (selectingNumber + 1 + maxLv) % maxLv;
-            if(selectingNumber == 0)selectingNumber = maxLv;
+            selectingNumber = (selectingNumber + 1 + maxLv + 1) % (maxLv + 1);
+            if(selectingNumber == 0)selectingNumber = maxLv + 1;
         }
         //画面遷移
         if(key_enter_flag){

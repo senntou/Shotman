@@ -347,26 +347,68 @@ public class LevelFour extends NPC{
 public class LevelFive extends NPC{
     public LevelFive(float x,float y){
         super(x,y);
+        setBulletBetweenFrame(4);
+        setBulletDamage(6);
+        increaseHP(3);
     }
     public void shot(){
         if (this.beamFrameCount != 0) return;
         if (this.bulletFrameCount != 0) return;
         this.bulletFrameCount += 1;
         
-        for(int i = 0;i < 4;i++){
+        int numOfDir = 8;
+        for(int i = 0;i < numOfDir;i++){
             int num = (int)random(0,10000);
             while(bullets.containsKey(num)) {
                 num = (num + 1) % 10000;
             }
-            bullets.put(num,new SpiralBullet(this.x,this.y,(this.theta + i * 90) % 360) );
+            bullets.put(num,new SpiralBullet(this.x,this.y,(this.theta + i * (360 / numOfDir)) % 360,BULLET_SPEED/2) );
         }
     }
     public void move(){
         if(!enemy.isActive()) return ;
+        this.theta = (this.theta + 0.5) % 360;
         this.shot();
+        
+        fill(0);
+        text("bullets" + this.bullets.size(),100,100);
     }
     public void resetPoint(){
         this.x = width/2;
         this.y = height/12;
     }
+}
+public class LevelSix extends NPC{
+    public LevelSix(float x,float y){
+        super(x,y);
+        this.setBulletBetweenFrame(8);
+        this.setBulletDamage(BULLET_DAMAGE * 4);
+        this.increaseHP(1.8);
+    }
+    public void shot(){
+        if (this.beamFrameCount != 0) return;
+        if (this.bulletFrameCount != 0) return;
+        this.bulletFrameCount += 1;
+        
+        int num = (int)random(0,10000);
+        while(bullets.containsKey(num)) {
+            num = (num + 1) % 10000;
+        }
+        bullets.put(num,new TrackingBullet(
+            this.x,this.y,(this.theta + 330) % 360,BULLET_SPEED / 3,BULLET_RADIUS*3/4,this.enemy));
+        while(bullets.containsKey(num)) {
+            num = (num + 1) % 10000;
+        }
+        bullets.put(num,new TrackingBullet(
+            this.x,this.y,(this.theta + 30) % 360,BULLET_SPEED / 3,BULLET_RADIUS*3/4,this.enemy));
+    }
+    public void move(){
+        if(!enemy.isActive()) return;
+        shot();
+    }
+    public void resetPoint(){
+        this.x = width/2;
+        this.y = height/12;
+    }
+
 }

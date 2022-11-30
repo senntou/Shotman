@@ -246,9 +246,3 @@ public class DestroyMotion{
     }
 }
 
-/*
-000110
-011110
-000000
-
-*/
